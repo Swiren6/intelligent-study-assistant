@@ -4,4 +4,16 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 3000,
+    host: true,
+  },
+  define: {
+    // Définir process.env pour éviter les erreurs
+    'process.env': {}
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+  }
 })
