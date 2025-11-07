@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   BookOpen, Brain, Calendar, TrendingUp, Bell, BarChart, Target, 
@@ -7,14 +7,37 @@ import {
 } from 'lucide-react';
 
 const HomePage = () => {
-  const [activeFeature, setActiveFeature] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
+   const [_activeFeature, setActiveFeature] = useState(0);
+   const [_scrollY, _setScrollY] = useState(0);
+
+  const colorClasses = {
+    primary: {
+      bg: 'bg-primary/20',
+      text: 'text-primary',
+      border: 'border-primary/20'
+    },
+    secondary: {
+      bg: 'bg-secondary/20',
+      text: 'text-secondary',
+      border: 'border-secondary/20'
+    },
+    accent: {
+      bg: 'bg-accent/20',
+      text: 'text-accent',
+      border: 'border-accent/20'
+    },
+    success: {
+      bg: 'bg-success/20',
+      text: 'text-success',
+      border: 'border-success/20'
+    }
+  };
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleScroll = () => _setScrollY(window.scrollY);
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
 
   const features = [
     {
@@ -172,7 +195,8 @@ const HomePage = () => {
                   <div 
                     key={idx} 
                     className="glass-card rounded-xl p-4 hover-lift animate-slide-in-up"
-                    style={{ animationDelay: `${idx * 100}ms` }}
+                    style={{ animationDelay: `${Math.min(idx * 100, 1000)}ms` }}
+
                   >
                     <div className="flex items-center gap-2 text-primary mb-1">
                       {stat.icon}
@@ -267,41 +291,42 @@ const HomePage = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, idx) => (
-              <div
-                key={idx}
-                className="group glass-card rounded-2xl overflow-hidden hover-lift animate-slide-in-up cursor-pointer"
-                style={{ animationDelay: `${idx * 100}ms` }}
-                onMouseEnter={() => setActiveFeature(idx)}
-              >
-                {/* Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={feature.image} 
-                    alt={feature.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className={`absolute top-4 left-4 w-12 h-12 bg-${feature.color}/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-${feature.color} border border-${feature.color}/20`}>
-                    {feature.icon}
-                  </div>
-                </div>
+            {features.map((feature, idx) => {
+  const colors = colorClasses[feature.color] || colorClasses.primary;
+  return (
+    <div
+      key={idx}
+      className="group glass-card rounded-2xl overflow-hidden hover-lift animate-slide-in-up cursor-pointer"
+      style={{ animationDelay: `${idx * 100}ms` }}
+      onMouseEnter={() => setActiveFeature(idx)}
+    >
+      <div className="relative h-48 overflow-hidden">
+        <img 
+          src={feature.image} 
+          alt={feature.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div className={`absolute top-4 left-4 w-12 h-12 ${colors.bg} backdrop-blur-xl rounded-xl flex items-center justify-center ${colors.text} border ${colors.border}`}>
+          {feature.icon}
+        </div>
+      </div>
 
-                {/* Content */}
-                <div className="p-6 space-y-3">
-                  <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
-                  <div className="flex items-center text-primary text-sm font-semibold group-hover:gap-2 transition-all">
-                    En savoir plus
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            ))}
+      <div className="p-6 space-y-3">
+        <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
+          {feature.title}
+        </h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {feature.description}
+        </p>
+        <div className="flex items-center text-primary text-sm font-semibold group-hover:gap-2 transition-all">
+          En savoir plus
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </div>
+      </div>
+    </div>
+  );
+})}
           </div>
         </div>
       </section>

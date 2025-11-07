@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, BookOpen, Check } from 'lucide-react';
 import axios from 'axios';
+import Navbar from '../../components/Navbar';
+
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -84,6 +86,8 @@ const RegisterPage = () => {
   };
 
   return (
+    <>
+    <Navbar showBackButton={true} />
     <main className="min-h-screen bg-background flex overflow-hidden">
       {/* Left side - Features */}
       <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-secondary via-primary to-secondary p-12 flex-col justify-between relative overflow-hidden">
@@ -349,6 +353,7 @@ const RegisterPage = () => {
         </div>
       </div>
     </main>
+    </>
   );
 };
 

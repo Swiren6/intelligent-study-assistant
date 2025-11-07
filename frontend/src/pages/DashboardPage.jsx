@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';import { useNavigate } from 'react-router-dom';
 import {
   Calendar,
   BookOpen,
@@ -19,6 +18,18 @@ const DashboardPage = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const statColorClasses = {
+    primary: 'text-primary',
+    secondary: 'text-secondary',
+    accent: 'text-accent',
+    success: 'text-success'
+  };
+
+  const sessionColorClasses = {
+    primary: 'bg-primary/10 text-primary',
+    secondary: 'bg-secondary/10 text-secondary',
+    accent: 'bg-accent/10 text-accent',
+  };
   useEffect(() => {
     const loadUser = async () => {
       try {
@@ -176,22 +187,29 @@ const DashboardPage = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="bg-card rounded-xl border border-border p-6 hover:border-primary/50 hover:shadow-lg transition-all animate-fade-in-up"
-              style={{ animationDelay: `${idx * 0.1}s` }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 bg-${stat.color}/10 rounded-lg flex items-center justify-center text-${stat.color}`}>
-                  {stat.icon}
-                </div>
-                <span className="text-sm font-semibold text-green-500">{stat.change}</span>
-              </div>
-              <p className="text-2xl font-bold mb-1">{stat.value}</p>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-            </div>
-          ))}
+          {stats.map((stat, idx) => {
+  const iconBgClass = stat.color === 'primary' ? 'bg-primary/10' :
+                      stat.color === 'secondary' ? 'bg-secondary/10' :
+                      stat.color === 'accent' ? 'bg-accent/10' : 'bg-primary/10';
+  const iconTextClass = statColorClasses[stat.color] || 'text-primary';
+  
+  return (
+    <div
+      key={idx}
+      className="bg-card rounded-xl border border-border p-6 hover:border-primary/50 hover:shadow-lg transition-all animate-fade-in-up"
+      style={{ animationDelay: `${idx * 0.1}s` }}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className={`w-12 h-12 ${iconBgClass} rounded-lg flex items-center justify-center ${iconTextClass}`}>
+          {stat.icon}
+        </div>
+        <span className="text-sm font-semibold text-green-500">{stat.change}</span>
+      </div>
+      <p className="text-2xl font-bold mb-1">{stat.value}</p>
+      <p className="text-sm text-muted-foreground">{stat.label}</p>
+    </div>
+  );
+})}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -255,23 +273,27 @@ const DashboardPage = () => {
                 <ChevronRight className="w-5 h-5 text-muted-foreground" />
               </div>
               <div className="space-y-4">
-                {upcomingSessions.map((session, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-lg border border-border hover:border-primary/50 transition-all"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold">{session.subject}</span>
-                      <span className={`text-xs px-2 py-1 rounded-full bg-${session.color}/10 text-${session.color}`}>
-                        {session.date}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Clock className="w-4 h-4" />
-                      {session.time}
-                    </div>
-                  </div>
-                ))}
+                {upcomingSessions.map((session, idx) => {
+  const sessionColors = sessionColorClasses[session.color] || sessionColorClasses.primary;
+  
+  return (
+    <div
+      key={idx}
+      className="p-4 rounded-lg border border-border hover:border-primary/50 transition-all"
+    >
+      <div className="flex items-center justify-between mb-2">
+        <span className="font-semibold">{session.subject}</span>
+        <span className={`text-xs px-2 py-1 rounded-full ${sessionColors}`}>
+          {session.date}
+        </span>
+      </div>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Clock className="w-4 h-4" />
+        {session.time}
+      </div>
+    </div>
+  );
+})}
               </div>
             </div>
 
