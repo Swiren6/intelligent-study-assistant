@@ -1,8 +1,8 @@
-import React from 'react';
+// Composants UI réutilisables avec corrections des classes Tailwind dynamiques
 
 // Badge avec styles premium
 export const Badge = ({ children, variant = 'default', className = '' }) => {
-  const variants = {
+  const variantClasses = {
     default: 'bg-primary/10 text-primary border-primary/20',
     secondary: 'bg-secondary/10 text-secondary border-secondary/20',
     accent: 'bg-accent/10 text-accent border-accent/20',
@@ -11,7 +11,7 @@ export const Badge = ({ children, variant = 'default', className = '' }) => {
   };
 
   return (
-    <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border ${variants[variant]} ${className}`}>
+    <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border ${variantClasses[variant]} ${className}`}>
       {children}
     </span>
   );
@@ -20,7 +20,7 @@ export const Badge = ({ children, variant = 'default', className = '' }) => {
 // Card avec effet glass
 export const GlassCard = ({ children, className = '', hover = true }) => {
   return (
-    <div className={`glass-card rounded-2xl p-6 ${hover ? 'hover-lift' : ''} ${className}`}>
+    <div className={`glass-card rounded-2xl p-6 ${hover ? 'hover:shadow-lg hover:-translate-y-1 transition-all duration-300' : ''} ${className}`}>
       {children}
     </div>
   );
@@ -28,7 +28,7 @@ export const GlassCard = ({ children, className = '', hover = true }) => {
 
 // Button avec gradients
 export const GradientButton = ({ children, variant = 'primary', className = '', ...props }) => {
-  const variants = {
+  const variantClasses = {
     primary: 'gradient-primary shadow-glow',
     secondary: 'gradient-secondary shadow-glow',
     accent: 'gradient-accent shadow-glow',
@@ -36,7 +36,7 @@ export const GradientButton = ({ children, variant = 'primary', className = '', 
 
   return (
     <button
-      className={`px-6 py-3 ${variants[variant]} text-white rounded-xl font-semibold hover:opacity-90 transition-all ${className}`}
+      className={`px-6 py-3 ${variantClasses[variant]} text-white rounded-xl font-semibold hover:opacity-90 transition-all ${className}`}
       {...props}
     >
       {children}
@@ -46,14 +46,14 @@ export const GradientButton = ({ children, variant = 'primary', className = '', 
 
 // Icon Box avec animation
 export const IconBox = ({ icon, color = 'primary', size = 'md', animated = true }) => {
-  const sizes = {
+  const sizeClasses = {
     sm: 'w-10 h-10',
     md: 'w-12 h-12',
     lg: 'w-16 h-16',
     xl: 'w-20 h-20',
   };
 
-  const colors = {
+  const colorClasses = {
     primary: 'bg-primary/10 text-primary',
     secondary: 'bg-secondary/10 text-secondary',
     accent: 'bg-accent/10 text-accent',
@@ -61,7 +61,7 @@ export const IconBox = ({ icon, color = 'primary', size = 'md', animated = true 
   };
 
   return (
-    <div className={`${sizes[size]} ${colors[color]} rounded-xl flex items-center justify-center ${animated ? 'animate-float' : ''}`}>
+    <div className={`${sizeClasses[size]} ${colorClasses[color]} rounded-xl flex items-center justify-center ${animated ? 'animate-float' : ''}`}>
       {icon}
     </div>
   );
@@ -70,7 +70,7 @@ export const IconBox = ({ icon, color = 'primary', size = 'md', animated = true 
 // Stats Card
 export const StatsCard = ({ value, label, icon, trend, trendValue }) => {
   return (
-    <div className="glass-card rounded-xl p-4 hover-lift">
+    <div className="glass-card rounded-xl p-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
       <div className="flex items-start justify-between mb-2">
         <div className="text-primary">
           {icon}
@@ -87,10 +87,36 @@ export const StatsCard = ({ value, label, icon, trend, trendValue }) => {
   );
 };
 
-// Feature Card avec image
+// Feature Card avec image - CORRIGÉ
 export const FeatureCard = ({ title, description, image, icon, color = 'primary' }) => {
+  // Mapping des couleurs - CORRECTION MAJEURE
+  const colorClasses = {
+    primary: {
+      bg: 'bg-primary/20',
+      text: 'text-primary',
+      border: 'border-primary/20'
+    },
+    secondary: {
+      bg: 'bg-secondary/20',
+      text: 'text-secondary',
+      border: 'border-secondary/20'
+    },
+    accent: {
+      bg: 'bg-accent/20',
+      text: 'text-accent',
+      border: 'border-accent/20'
+    },
+    success: {
+      bg: 'bg-success/20',
+      text: 'text-success',
+      border: 'border-success/20'
+    }
+  };
+
+  const colors = colorClasses[color] || colorClasses.primary;
+
   return (
-    <div className="group glass-card rounded-2xl overflow-hidden hover-lift cursor-pointer">
+    <div className="group glass-card rounded-2xl overflow-hidden hover:-translate-y-2 hover:shadow-lg transition-all duration-300 cursor-pointer">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img 
@@ -99,7 +125,7 @@ export const FeatureCard = ({ title, description, image, icon, color = 'primary'
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-        <div className={`absolute top-4 left-4 w-12 h-12 bg-${color}/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-${color} border border-${color}/20`}>
+        <div className={`absolute top-4 left-4 w-12 h-12 ${colors.bg} backdrop-blur-xl rounded-xl flex items-center justify-center ${colors.text} border ${colors.border}`}>
           {icon}
         </div>
       </div>
@@ -120,7 +146,7 @@ export const FeatureCard = ({ title, description, image, icon, color = 'primary'
 // Testimonial Card
 export const TestimonialCard = ({ name, role, avatar, content, rating }) => {
   return (
-    <div className="glass-card rounded-2xl p-6 space-y-4 hover-lift">
+    <div className="glass-card rounded-2xl p-6 space-y-4 hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
       {/* Rating */}
       <div className="flex gap-1">
         {[...Array(rating)].map((_, i) => (
@@ -132,7 +158,7 @@ export const TestimonialCard = ({ name, role, avatar, content, rating }) => {
 
       {/* Content */}
       <p className="text-sm leading-relaxed text-muted-foreground">
-        "{content}"
+        &quot;{content}&quot;
       </p>
 
       {/* Author */}
@@ -153,7 +179,7 @@ export const TestimonialCard = ({ name, role, avatar, content, rating }) => {
 
 // Progress Bar avec gradient
 export const ProgressBar = ({ value, label, showValue = true, color = 'primary' }) => {
-  const colors = {
+  const colorClasses = {
     primary: 'gradient-primary',
     secondary: 'gradient-secondary',
     accent: 'gradient-accent',
@@ -169,7 +195,7 @@ export const ProgressBar = ({ value, label, showValue = true, color = 'primary' 
       )}
       <div className="h-3 bg-muted/50 rounded-full overflow-hidden">
         <div 
-          className={`h-full ${colors[color]} rounded-full transition-all duration-500`}
+          className={`h-full ${colorClasses[color]} rounded-full transition-all duration-500`}
           style={{ width: `${value}%` }}
         ></div>
       </div>
@@ -179,38 +205,38 @@ export const ProgressBar = ({ value, label, showValue = true, color = 'primary' 
 
 // Loading Spinner
 export const LoadingSpinner = ({ size = 'md', color = 'primary' }) => {
-  const sizes = {
+  const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
     lg: 'w-12 h-12',
   };
 
-  const colors = {
+  const colorClasses = {
     primary: 'border-primary/30 border-t-primary',
     secondary: 'border-secondary/30 border-t-secondary',
     accent: 'border-accent/30 border-t-accent',
   };
 
   return (
-    <div className={`${sizes[size]} border-2 ${colors[color]} rounded-full animate-spin`}></div>
+    <div className={`${sizeClasses[size]} border-2 ${colorClasses[color]} rounded-full animate-spin`}></div>
   );
 };
 
 // Floating Blob (background decoration)
 export const FloatingBlob = ({ color = 'primary', size = 'md', delay = 0, position = 'top-right' }) => {
-  const sizes = {
+  const sizeClasses = {
     sm: 'w-48 h-48',
     md: 'w-72 h-72',
     lg: 'w-96 h-96',
   };
 
-  const colors = {
+  const colorClasses = {
     primary: 'bg-primary/30',
     secondary: 'bg-secondary/30',
     accent: 'bg-accent/30',
   };
 
-  const positions = {
+  const positionClasses = {
     'top-left': 'top-0 left-0',
     'top-right': 'top-0 right-0',
     'bottom-left': 'bottom-0 left-0',
@@ -220,7 +246,7 @@ export const FloatingBlob = ({ color = 'primary', size = 'md', delay = 0, positi
 
   return (
     <div 
-      className={`absolute ${positions[position]} ${sizes[size]} ${colors[color]} rounded-full blur-3xl animate-blob pointer-events-none`}
+      className={`absolute ${positionClasses[position]} ${sizeClasses[size]} ${colorClasses[color]} rounded-full blur-3xl animate-blob pointer-events-none`}
       style={{ animationDelay: `${delay}ms` }}
     ></div>
   );
@@ -229,17 +255,17 @@ export const FloatingBlob = ({ color = 'primary', size = 'md', delay = 0, positi
 // Section Header
 export const SectionHeader = ({ badge, title, description, centered = true }) => {
   return (
-    <div className={`space-y-4 mb-16 ${centered ? 'text-center' : ''} animate-slide-in-up`}>
+    <div className={`space-y-4 mb-16 ${centered ? 'text-center' : ''}`}>
       {badge && (
         <div className={centered ? 'flex justify-center' : ''}>
           <Badge variant="default">{badge}</Badge>
         </div>
       )}
-      <h2 className="text-responsive-lg font-bold">
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">
         {title}
       </h2>
       {description && (
-        <p className={`text-responsive-sm text-muted-foreground ${centered ? 'max-w-2xl mx-auto' : ''}`}>
+        <p className={`text-base md:text-lg text-muted-foreground ${centered ? 'max-w-2xl mx-auto' : ''}`}>
           {description}
         </p>
       )}
@@ -247,17 +273,24 @@ export const SectionHeader = ({ badge, title, description, centered = true }) =>
   );
 };
 
-// Grid Container
+// Grid Container - CORRIGÉ
 export const GridContainer = ({ children, cols = 3, gap = 8 }) => {
-  const colsMap = {
+  const colsClasses = {
     1: 'grid-cols-1',
-    2: 'md:grid-cols-2',
-    3: 'md:grid-cols-2 lg:grid-cols-3',
-    4: 'md:grid-cols-2 lg:grid-cols-4',
+    2: 'grid-cols-1 md:grid-cols-2',
+    3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+  };
+
+  const gapClasses = {
+    4: 'gap-4',
+    6: 'gap-6',
+    8: 'gap-8',
+    12: 'gap-12',
   };
 
   return (
-    <div className={`grid ${colsMap[cols]} gap-${gap}`}>
+    <div className={`grid ${colsClasses[cols]} ${gapClasses[gap]}`}>
       {children}
     </div>
   );

@@ -67,7 +67,19 @@ api.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+    if (error.response?.status === 403) {
+      console.error('Accès refusé');
+    }
 
+    // Gestion 500 - Erreur serveur
+    if (error.response?.status >= 500) {
+      console.error('Erreur serveur:', error.response.data);
+    }
+
+    // Gestion erreur réseau
+    if (!error.response) {
+      console.error('Erreur réseau - Serveur inaccessible');
+    }
     return Promise.reject(error);
   }
 );

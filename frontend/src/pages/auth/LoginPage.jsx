@@ -1,9 +1,26 @@
 import { useState, useEffect } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
 import { Eye, EyeOff, BookOpen } from "lucide-react"
-import { apiService } from "../../../lib/api-service"
+import { apiService } from "../../services/api"
+import Navbar from '../../components/Navbar';
+
+// Composants locaux si les fichiers ui/ n'existent pas encore
+const Input = ({ className = "", type = "text", ...props }) => (
+  <input
+    type={type}
+    className={`w-full bg-muted border-0 py-3 px-4 rounded-lg focus:ring-2 focus:ring-primary focus:bg-background transition-all outline-none ${className}`}
+    {...props}
+  />
+);
+
+const Button = ({ children, className = "", ...props }) => (
+  <button
+    className={`px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition ${className}`}
+    {...props}
+  >
+    {children}
+  </button>
+);
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -62,6 +79,8 @@ export default function LoginPage() {
   }
 
   return (
+    <>
+    <Navbar showBackButton={true} />
     <main className="min-h-screen bg-background flex overflow-hidden">
       {/* Left side - Features */}
       <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-primary via-secondary to-primary p-12 flex-col justify-between relative overflow-hidden">
@@ -226,5 +245,6 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
+    </>
   )
 }

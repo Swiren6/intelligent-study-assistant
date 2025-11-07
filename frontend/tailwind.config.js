@@ -114,11 +114,7 @@ export default {
         'glow': '0 0 40px -10px hsl(var(--primary) / 0.4)',
         'glow-lg': '0 0 60px -15px hsl(var(--primary) / 0.6)',
       },
-      backgroundImage: {
-        'gradient-primary': 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
-        'gradient-secondary': 'linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--accent)) 100%)',
-        'gradient-accent': 'linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%)',
-      },
+      
     },
   },
   plugins: [],
